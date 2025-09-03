@@ -22,10 +22,14 @@ const SchoolForm: React.FC<SchoolFormProps> = ({
     formState: { errors, isValid },
     watch,
     setValue,
-    clearErrors
+    clearErrors,
+    trigger
   } = form;
 
   const watchedImages = watch('images');
+  
+  // Custom validation state that properly handles images
+  const isFormValid = isValid && watchedImages.length > 0;
 
   // File upload handler
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +55,9 @@ const SchoolForm: React.FC<SchoolFormProps> = ({
     
     setValue('images', files);
     clearErrors('images');
-  }, [form, setValue, clearErrors]);
+    // Trigger validation to update isValid state
+    trigger(); // Trigger validation for all fields
+  }, [form, setValue, clearErrors, trigger]);
 
   // Remove image handler
   const removeImage = useCallback((indexToRemove: number) => {
@@ -61,7 +67,10 @@ const SchoolForm: React.FC<SchoolFormProps> = ({
     if (newImages.length === 0) {
       form.setError('images', { message: 'At least one image is required' });
     }
-  }, [watchedImages, setValue, form]);
+    
+    // Trigger validation to update isValid state
+    trigger(); // Trigger validation for all fields
+  }, [watchedImages, setValue, form, trigger]);
 
   // Animation variants
   const containerVariants = {
@@ -238,7 +247,7 @@ const SchoolForm: React.FC<SchoolFormProps> = ({
             type="tel"
             id="contact"
             className="input-field"
-            placeholder="Enter 10-digit contact number"
+            placeholder="Enter 10-digit Indian phone number (e.g., 9876543210)"
             disabled={isLoading}
           />
           <AnimatePresence>
@@ -376,7 +385,7 @@ const SchoolForm: React.FC<SchoolFormProps> = ({
       <motion.div variants={itemVariants} className="pt-6">
         <button
           type="submit"
-          disabled={isLoading || !isValid}
+          disabled={isLoading || !isFormValid}
           className="w-full btn btn-primary px-6 py-4 text-lg font-semibold relative overflow-hidden"
         >
           {isLoading ? (
@@ -399,9 +408,11 @@ const SchoolForm: React.FC<SchoolFormProps> = ({
           />
         </button>
         
-        {!isValid && (
+        {!isFormValid && (
           <p className="mt-2 text-sm text-dark-400 text-center">
-            Please fill all required fields correctly to submit
+            {!isValid 
+              ? 'Please fill all required fields correctly to submit'
+              : 'Please add at least one image to submit'}
           </p>
         )}
       </motion.div>

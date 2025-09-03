@@ -14,7 +14,7 @@ const schoolSchema = z.object({
   address: z.string().min(10, 'Address must be at least 10 characters').max(500, 'Address is too long'),
   city: z.string().min(2, 'City name must be at least 2 characters').max(100, 'City name is too long'),
   state: z.string().min(2, 'State name must be at least 2 characters').max(100, 'State name is too long'),
-  contact: z.number().min(1000000000, 'Contact number must be at least 10 digits').max(9999999999, 'Contact number cannot exceed 10 digits'),
+  contact: z.number().min(1000000000, 'Contact number must be exactly 10 digits').max(9999999999, 'Contact number must be exactly 10 digits'),
   email_id: z.string().email('Please enter a valid email address').max(255, 'Email is too long'),
   images: z.array(z.instanceof(File))
     .min(1, 'At least one image is required')
@@ -226,6 +226,7 @@ const AddSchoolPage: React.FC = () => {
                   <ul className="space-y-1">
                     <li>• Provide complete and accurate school details</li>
                     <li>• Use official school name and contact information</li>
+                    <li>• Enter 10-digit Indian phone number (without +91)</li>
                     <li>• Include full address with city and state</li>
                   </ul>
                 </div>

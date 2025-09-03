@@ -33,6 +33,27 @@ const getImagesFromDatabase = async (schoolId: number): Promise<string[]> => {
 };
 
 /**
+ * Helper function to format Indian phone number
+ */
+const formatIndianPhoneNumber = (phoneNumber: string | number): string => {
+  // Convert to string and remove any existing country code or special characters
+  let cleanNumber = phoneNumber.toString().replace(/\D/g, '');
+  
+  // Remove existing +91 or 91 prefix if present
+  if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
+    cleanNumber = cleanNumber.substring(2);
+  }
+  
+  // Ensure it's a 10-digit number
+  if (cleanNumber.length !== 10) {
+    throw new Error('Phone number must be exactly 10 digits');
+  }
+  
+  // Add +91 prefix for Indian numbers
+  return `+91${cleanNumber}`;
+};
+
+/**
  * Create a new school with image uploads
  */
 export const createSchool = async (req: Request, res: Response): Promise<void> => {
@@ -48,6 +69,18 @@ export const createSchool = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
+    // Format phone number with +91 prefix
+    let formattedContact: string;
+    try {
+      formattedContact = formatIndianPhoneNumber(contact);
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        error: 'Invalid phone number. Please enter a valid 10-digit Indian phone number.'
+      });
+      return;
+    }
+
     // Insert school into database first
     const insertQuery = `
       INSERT INTO schools (name, address, city, state, contact, email_id)
@@ -55,7 +88,7 @@ export const createSchool = async (req: Request, res: Response): Promise<void> =
     `;
 
     const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
-      name, address, city, state, parseInt(contact), email_id
+      name, address, city, state, formattedContact, email_id
     ]);
 
     const schoolId = result.insertId;

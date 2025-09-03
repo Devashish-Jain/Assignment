@@ -4,7 +4,7 @@ export interface School {
   address: string;
   city: string;
   state: string;
-  contact: number;
+  contact: string; // Changed to string to support +91 format
   email_id: string;
   images: string; // JSON string of image filenames array
   created_at?: string;
@@ -15,7 +15,7 @@ export interface SchoolCreateRequest {
   address: string;
   city: string;
   state: string;
-  contact: number;
+  contact: number | string; // Accept both for input flexibility
   email_id: string;
 }
 

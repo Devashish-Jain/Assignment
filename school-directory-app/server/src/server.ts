@@ -2,7 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import path from 'path';
 import { config } from './config';
-import { testConnection, initializeDatabase, createDatabaseIfNotExists } from './services/database';
+import { testConnection, initializeDatabase } from './services/database';
 import schoolRoutes from './routes/schoolRoutes';
 
 // Create Express application

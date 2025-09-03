@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { School } from '../../services/apiService';
+import { School, formatIndianPhoneForDisplay } from '../../services/apiService';
 import ImageSlider from './ImageSlider';
 
 interface SchoolCardProps {
@@ -135,7 +135,7 @@ const SchoolCard: React.FC<SchoolCardProps> = ({ school }) => {
                 href={`tel:${school.contact}`}
                 className="text-dark-300 hover:text-primary-400 transition-colors duration-200"
               >
-                {school.contact.toString().replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
+                {formatIndianPhoneForDisplay(school.contact)}
               </a>
             </div>
             

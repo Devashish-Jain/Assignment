@@ -87,7 +87,7 @@ export const initializeDatabase = async (): Promise<void> => {
         address TEXT NOT NULL,
         city VARCHAR(100) NOT NULL,
         state VARCHAR(100) NOT NULL,
-        contact BIGINT NOT NULL,
+        contact VARCHAR(20) NOT NULL,
         email_id VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );

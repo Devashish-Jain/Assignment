@@ -7,7 +7,7 @@ export interface School {
   address: string;
   city: string;
   state: string;
-  contact: number;
+  contact: string; // Changed to string to support +91 format
   email_id: string;
   images: string[];
   created_at: string;
@@ -173,6 +173,27 @@ class ApiService {
     return response.data;
   }
 }
+
+/**
+ * Format Indian phone number for display
+ * Converts +919876543210 to +91 98765 43210
+ */
+export const formatIndianPhoneForDisplay = (phoneNumber: string): string => {
+  if (!phoneNumber) return '';
+  
+  // Remove any non-digit characters except +
+  const cleaned = phoneNumber.replace(/[^\d+]/g, '');
+  
+  // Check if it's an Indian number with +91
+  if (cleaned.startsWith('+91') && cleaned.length === 13) {
+    const number = cleaned.substring(3); // Remove +91
+    // Format as +91 XXXXX XXXXX
+    return `+91 ${number.substring(0, 5)} ${number.substring(5)}`;
+  }
+  
+  // If it doesn't match expected format, return as is
+  return phoneNumber;
+};
 
 // Export singleton instance
 export const apiService = new ApiService();
