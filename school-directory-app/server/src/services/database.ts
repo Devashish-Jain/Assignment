@@ -15,7 +15,9 @@ const dbConfig = {
   queueLimit: 0,
   ssl: {
     rejectUnauthorized: false,
+    // Enforce SSL mode for SkySQL
   },
+  requireSSL: true,
   connectTimeout: 60000
   // Removed authPlugins - not needed for SkySQL
 };
@@ -50,6 +52,7 @@ export const createDatabaseIfNotExists = async (): Promise<void> => {
       user: process.env.DB_USER!,
       password: process.env.DB_PASSWORD!,
       ssl: { rejectUnauthorized: false },
+      requireSSL: true,
       connectTimeout: 60000
     };
 
