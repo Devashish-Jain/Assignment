@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 
 /**
  * Custom hook to initialize and manage Lenis smooth scrolling
@@ -7,17 +7,11 @@ import Lenis from '@studio-freight/lenis';
  */
 export const useSmoothScroll = () => {
   useEffect(() => {
-    // Initialize Lenis with optimal settings for smooth scrolling
+    // Initialize Lenis with basic settings for smooth scrolling
     const lenis = new Lenis({
       lerp: 0.1, // Linear interpolation factor (0-1, lower = smoother but slower)
       duration: 1.2, // Scroll duration
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing function
-      direction: 'vertical', // Scroll direction
-      gestureDirection: 'vertical', // Gesture direction
-      smooth: true,
-      smoothTouch: false, // Disable smooth scrolling on touch devices for better performance
-      touchMultiplier: 2,
-      infinite: false,
     });
 
     // Animation frame function for Lenis
