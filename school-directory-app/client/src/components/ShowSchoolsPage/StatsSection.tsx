@@ -9,9 +9,10 @@ interface StatsSectionProps {
     totalStates: number;
     totalImages: number;
   };
+  isLoading?: boolean;
 }
 
-const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
+const StatsSection: React.FC<StatsSectionProps> = ({ stats, isLoading = false }) => {
   const statsData = [
     {
       id: 'schools',
@@ -129,14 +130,20 @@ const StatsSection: React.FC<StatsSectionProps> = ({ stats }) => {
                         delay: index * 0.1 
                       }}
                     >
-                      <CountUp
-                        end={stat.value}
-                        duration={2.5}
-                        enableScrollSpy
-                        scrollSpyOnce
-                        suffix={stat.suffix}
-                        preserveValue
-                      />
+                      {isLoading ? (
+                        <div className="animate-pulse bg-gradient-to-r from-dark-600 to-dark-700 rounded h-12 w-24 mx-auto" />
+                      ) : (
+                        <CountUp
+                          start={0}
+                          end={stat.value}
+                          duration={2.5}
+                          enableScrollSpy
+                          scrollSpyOnce
+                          suffix={stat.suffix}
+                          preserveValue
+                          useEasing
+                        />
+                      )}
                     </motion.div>
                   </div>
 

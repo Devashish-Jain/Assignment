@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import compression from 'compression';
 import path from 'path';
 import { config } from './config';
 import { testConnection, initializeDatabase } from './services/database';
@@ -34,6 +35,7 @@ const initializeServer = async () => {
     console.log('✅ Connected to database successfully');
 
     // Middleware setup
+    app.use(compression()); // Enable response compression
     app.use(cors(config.cors));
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true, limit: '10mb' }));

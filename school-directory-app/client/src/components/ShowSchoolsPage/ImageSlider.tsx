@@ -127,6 +127,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, schoolName }) => {
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   whileHover={{ scale: 1.05 }}
                   loading="lazy"
+                  decoding="async"
+                  fetchPriority={index === 0 ? "high" : "low"} // Prioritize first image
                 />
               )}
 

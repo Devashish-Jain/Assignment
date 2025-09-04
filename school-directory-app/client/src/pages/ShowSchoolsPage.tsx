@@ -35,7 +35,7 @@ const ShowSchoolsPage: React.FC = () => {
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Animation variants
@@ -99,7 +99,7 @@ const ShowSchoolsPage: React.FC = () => {
       <ParallaxHero />
       
       {/* Stats Section */}
-      <StatsSection stats={stats} />
+      <StatsSection stats={stats} isLoading={isLoading} />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -22,8 +22,16 @@ const dbConfig = {
   }
 };
 
-// Create connection pool
-const pool = mysql.createPool(dbConfig);
+// Create connection pool with optimized settings
+const pool = mysql.createPool({
+  ...dbConfig,
+  connectionLimit: 20, // Increase connection pool
+  acquireTimeout: 60000,
+  timeout: 60000,
+  reconnect: true,
+  maxIdle: 10,
+  idleTimeout: 300000
+});
 
 // Test connection function
 export const testConnection = async (): Promise<boolean> => {
@@ -108,7 +116,26 @@ export const initializeDatabase = async (): Promise<void> => {
     
     await connection.execute(createSchoolsTableQuery);
     await connection.execute(createImagesTableQuery);
-    console.log('✅ Database schema initialized successfully');
+    
+    // Add performance indexes
+    const indexes = [
+      'CREATE INDEX IF NOT EXISTS idx_schools_name ON schools(name)',
+      'CREATE INDEX IF NOT EXISTS idx_schools_city ON schools(city)', 
+      'CREATE INDEX IF NOT EXISTS idx_schools_state ON schools(state)',
+      'CREATE INDEX IF NOT EXISTS idx_schools_created_at ON schools(created_at)',
+      'CREATE INDEX IF NOT EXISTS idx_school_images_school_id ON school_images(school_id)',
+      'CREATE INDEX IF NOT EXISTS idx_schools_name_city_state ON schools(name, city, state)' // Composite index for search
+    ];
+    
+    for (const indexQuery of indexes) {
+      try {
+        await connection.execute(indexQuery);
+      } catch (error) {
+        console.log(`Index already exists or failed to create: ${indexQuery}`);
+      }
+    }
+    
+    console.log('✅ Database schema and indexes initialized successfully');
     
     connection.release();
   } catch (error) {

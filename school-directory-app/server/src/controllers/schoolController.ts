@@ -134,24 +134,44 @@ export const createSchool = async (req: Request, res: Response): Promise<void> =
 };
 
 /**
- * Get all schools
+ * Get all schools with optimized single query
  */
 export const getAllSchools = async (req: Request, res: Response): Promise<void> => {
   try {
-    const [rows] = await pool.execute<RowDataPacket[]>(
-      'SELECT * FROM schools ORDER BY created_at DESC'
-    );
+    // Single optimized query to get schools with image counts
+    const [rows] = await pool.execute<RowDataPacket[]>(`
+      SELECT 
+        s.*,
+        COALESCE(
+          JSON_ARRAYAGG(
+            CASE WHEN si.id IS NOT NULL 
+            THEN CAST(si.id AS CHAR) 
+            ELSE NULL END
+          ), 
+          JSON_ARRAY()
+        ) as image_ids,
+        COUNT(si.id) as image_count
+      FROM schools s
+      LEFT JOIN school_images si ON s.id = si.school_id
+      GROUP BY s.id
+      ORDER BY s.created_at DESC
+    `);
 
-    const schools = rows as School[];
-    const schoolsResponse: SchoolResponse[] = await Promise.all(
-      schools.map(async (school) => {
-        const images = await getImagesFromDatabase(school.id!);
-        return {
-          ...school,
-          images
-        };
-      })
-    );
+    const schoolsResponse: SchoolResponse[] = (rows as any[]).map(row => {
+      // Parse and filter out null values from JSON array
+      const images = JSON.parse(row.image_ids).filter((id: any) => id !== null);
+      return {
+        id: row.id,
+        name: row.name,
+        address: row.address,
+        city: row.city,
+        state: row.state,
+        contact: row.contact,
+        email_id: row.email_id,
+        created_at: row.created_at,
+        images
+      };
+    });
 
     res.status(200).json({
       success: true,
@@ -168,7 +188,7 @@ export const getAllSchools = async (req: Request, res: Response): Promise<void> 
 };
 
 /**
- * Search schools by name, city, or state
+ * Search schools by name, city, or state with optimized query
  */
 export const searchSchools = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -183,28 +203,46 @@ export const searchSchools = async (req: Request, res: Response): Promise<void> 
     }
 
     const searchTerm = `%${q.toLowerCase()}%`;
+    // Optimized search query with single JOIN
     const searchQuery = `
-      SELECT * FROM schools 
-      WHERE LOWER(name) LIKE ? 
-         OR LOWER(city) LIKE ? 
-         OR LOWER(state) LIKE ?
-      ORDER BY created_at DESC
+      SELECT 
+        s.*,
+        COALESCE(
+          JSON_ARRAYAGG(
+            CASE WHEN si.id IS NOT NULL 
+            THEN CAST(si.id AS CHAR) 
+            ELSE NULL END
+          ), 
+          JSON_ARRAY()
+        ) as image_ids
+      FROM schools s
+      LEFT JOIN school_images si ON s.id = si.school_id
+      WHERE LOWER(s.name) LIKE ? 
+         OR LOWER(s.city) LIKE ? 
+         OR LOWER(s.state) LIKE ?
+      GROUP BY s.id
+      ORDER BY s.created_at DESC
     `;
 
     const [rows] = await pool.execute<RowDataPacket[]>(searchQuery, [
       searchTerm, searchTerm, searchTerm
     ]);
 
-    const schools = rows as School[];
-    const schoolsResponse: SchoolResponse[] = await Promise.all(
-      schools.map(async (school) => {
-        const images = await getImagesFromDatabase(school.id!);
-        return {
-          ...school,
-          images
-        };
-      })
-    );
+    const schoolsResponse: SchoolResponse[] = (rows as any[]).map(row => {
+      // Parse and filter out null values from JSON array
+      const images = JSON.parse(row.image_ids).filter((id: any) => id !== null);
+      return {
+        id: row.id,
+        name: row.name,
+        address: row.address,
+        city: row.city,
+        state: row.state,
+        contact: row.contact,
+        email_id: row.email_id,
+        created_at: row.created_at,
+        images
+      };
+    });
 
     res.status(200).json({
       success: true,
