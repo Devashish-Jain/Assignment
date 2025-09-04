@@ -16,21 +16,15 @@ const dbConfig = {
   ssl: {
     rejectUnauthorized: false,
   },
-  connectTimeout: 60000,
-  authPlugins: {
-    mysql_native_password: () => Buffer.alloc(0)
-  }
+  connectTimeout: 60000
+  // Removed authPlugins - not needed for SkySQL
 };
 
-// Create connection pool with optimized settings
+// Create connection pool with valid MySQL2 options
 const pool = mysql.createPool({
   ...dbConfig,
-  connectionLimit: 20, // Increase connection pool
-  acquireTimeout: 60000,
-  timeout: 60000,
-  reconnect: true,
-  maxIdle: 10,
-  idleTimeout: 300000
+  connectionLimit: 20, // Increase connection pool from default 5 to 20
+  // Only using valid MySQL2 pool options
 });
 
 // Test connection function
