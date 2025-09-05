@@ -18,10 +18,10 @@
 ---
 
 <!-- <div> -->
-### **🌟 [EXPERIENCE THE LIVE APPLICATION NOW](https://school-directory-jdut.vercel.app/schools)[Server Link if the server is in Sleep Mode](https://assignment-backend-v5a6.onrender.com) 🌟**
+### **🌟 [EXPERIENCE THE LIVE APPLICATION NOW](https://school-directory-jdut.vercel.app/schools) 🌟**
 <!-- </div> -->
 
-
+### **🌟 [Click Here if Server is not working / in Sleep ](https://assignment-backend-v5a6.onrender.com) 🌟**
 
 
 ## 📖 **Overview**
