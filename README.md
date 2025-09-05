@@ -15,13 +15,7 @@
 
 </div>
 
----
-
-<!-- <div> -->
-### **🌟 [EXPERIENCE THE LIVE APPLICATION NOW](https://school-directory-jdut.vercel.app/schools) 🌟**
-<!-- </div> -->
-
-### **🌟 [Click Here if Server is not working / in Sleep ](https://assignment-backend-v5a6.onrender.com/health) 🌟**
+### **🌟 [Click Here if Server is not working / in Sleep](https://assignment-backend-v5a6.onrender.com/health) 🌟**
 
 
 ## 📖 **Overview**
