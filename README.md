@@ -17,6 +17,13 @@
 
 ---
 
+<!-- <div> -->
+### **🌟 [EXPERIENCE THE LIVE APPLICATION NOW](https://school-directory-jdut.vercel.app/schools)[Server Link if the server is in Sleep Mode](https://assignment-backend-v5a6.onrender.com) 🌟**
+<!-- </div> -->
+
+
+
+
 ## 📖 **Overview**
 
 The **School Directory Application** is a sophisticated, full-stack web platform designed to revolutionize how educational institutions connect with students and families. Built with cutting-edge technologies and featuring stunning animations, this application delivers a premium user experience that rivals modern SaaS platforms.
@@ -373,7 +380,7 @@ Special thanks to the amazing open-source community and the creators of:
 
 <div align="center">
 
-### **🌟 [EXPERIENCE THE LIVE APPLICATION NOW](https://school-directory-jdut.vercel.app/schools) 🌟**
+
 
 **Built with ❤️ using cutting-edge web technologies**
 
